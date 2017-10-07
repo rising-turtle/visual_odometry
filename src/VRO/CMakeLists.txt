@@ -9,6 +9,7 @@ if (${USE_SIFT_GPU})
 endif (${USE_SIFT_GPU})
 
 add_library(vro ${VRO_srcs})
+message("OpenCV_LIBS: ${OpenCV_LIBS}")
 target_link_libraries(vro cam_model ${catkin_LIBRARIES} ${QT_LIBRARIES} ${LIBS_LINK} ${OpenCV_LIBS} opengv )
 
 # add_library(sr4k_io SR_reader.cpp SR_reader_cv.cpp)
@@ -18,6 +19,9 @@ target_link_libraries(testVROSR4k vro sr4k_io)
 
 add_executable(testVRORS2h test_vro_r200.cpp)
 target_link_libraries(testVRORS2h vro rs2h_io)
+
+add_executable(testVRORS2h_2f test_two_frame_r200.cpp)
+target_link_libraries(testVRORS2h_2f vro rs2h_io)
 
 add_executable(test_cov test_cov.cpp)
 target_link_libraries(test_cov vro ${catkin_LIBRARIES})
