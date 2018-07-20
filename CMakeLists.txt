@@ -40,13 +40,23 @@ set(EIGEN_INCLUDE_DIRS "/usr/include/eigen3")
 include_directories(${EIGEN_INCLUDE_DIRS})
 add_definitions(${EIGEN_DEFINITIONS})
 # add_definitions(-DEIGEN_DONT_ALIGN)
-
+ 
 #############################
 # OpenCV ####################
 #############################
-find_package(OpenCV)
+find_package(OpenCV 2.4.10 EXACT REQUIRED 
+  PATHS "/home/davidz/work/3rdlibs/OpenCV-2.4.10/install/share/OpenCV"
+  NO_DEFAULT_PATH)
 include_directories(${OpenCV_INCLUDE_DIRS})
-link_directories(${OpenCV_LIBRARY_DIRS})
+link_directories(${OpenCV_LIBRARY_DIRS} "/usr/lib")
+message(STATUS "############ OpenCV_INCLUDE_DIRS: ${OpenCV_INCLUDE_DIRS}")
+message(STATUS "########### OpenCV_INSTALL_PATH: ${OpenCV_INSTALL_PATH}")
+message(STATUS "########### OpenCV_LIBRARY_DIRS: ${OpenCV_LIBRARY_DIRS}")
+
+######################
+# OpenGV #############
+######################
+link_directories("/home/davidz/work/3rdlibs/opengv/build/lib")
 
 #############################
 # Qt ########################
