@@ -28,5 +28,5 @@ target_link_libraries(test_cov vro ${catkin_LIBRARIES})
 
 
 ########### testPnP method #############
-add_executable(test_PnP test_PnP.cpp)
-target_link_libraries(test_PnP vro sr4k_io ${catkin_LIBRARIES} plane opengv)
+# add_executable(test_PnP test_PnP.cpp)
+# target_link_libraries(test_PnP vro sr4k_io ${catkin_LIBRARIES} plane opengv)

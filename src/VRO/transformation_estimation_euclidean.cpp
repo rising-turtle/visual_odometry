@@ -15,7 +15,7 @@ Eigen::Matrix4f getTransformFromMatches(const CCameraNode* newer_node,
     const cv::DMatch& m = matches[i];
     Eigen::Vector3f from = newer_node->m_feature_loc_3d[m.queryIdx].head<3>();
     Eigen::Vector3f to = earlier_node->m_feature_loc_3d[m.trainIdx].head<3>();
-    if(isnan(from(2)) || isnan(to(2)))
+    if(pcl_isnan(from(2)) || pcl_isnan(to(2)))
       continue;
     tfc.add(from, to, weight);// 1.0/(to(2)*to(2)));//the further, the less weight b/c of quadratic accuracy decay
   }
@@ -55,7 +55,7 @@ Eigen::Matrix4f getTransformFromMatches(const CCameraNode* newer_node,
     const cv::DMatch& m = matches[i];
     Eigen::Vector3f from = newer_node->m_feature_loc_3d[m.queryIdx].head<3>();
     Eigen::Vector3f to = earlier_node->m_feature_loc_3d[m.trainIdx].head<3>();
-    if(isnan(from(2)) || isnan(to(2)))
+    if(pcl_isnan(from(2)) || pcl_isnan(to(2)))
       continue;
     float weight = 1.0;
     // double dis = (from.norm() + to.norm())/2.;
@@ -104,7 +104,7 @@ Eigen::Matrix4f getTransformFromMatchesUmeyama(const CCameraNode* newer_node,
   for (int i = 0 ;it!=matches.end(); it++, i++) {
     Eigen::Vector3f f = newer_node->m_feature_loc_3d[it->queryIdx].head<3>(); //Oh my god, c++
     Eigen::Vector3f t = earlier_node->m_feature_loc_3d[it->trainIdx].head<3>();
-    if(isnan(f(2)) || isnan(t(2)))
+    if(pcl_isnan(f(2)) || pcl_isnan(t(2)))
       continue;
     froms.col(i) = f;
     tos.col(i) = t;

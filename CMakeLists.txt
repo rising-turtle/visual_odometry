@@ -16,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs 
   message_filters
   tf
-  cv_bridge
+  # cv_bridge
   )
 
 catkin_package(
@@ -27,8 +27,9 @@ catkin_package(
 set(CMAKE_CXX_FLAGS "-ggdb -g -O3 -fPIC -fpermissive -std=c++11 -w")
 
 ################# PCL #################
-find_package(PCL 1.8 REQUIRED common io
-  PATHS "/usr/local/share/pcl-1.8")
+# find_package(PCL 1.8 REQUIRED common io
+#  PATHS "/usr/local/share/pcl-1.8")
+find_package(PCL REQUIRED common io)
 include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 
@@ -45,7 +46,7 @@ add_definitions(${EIGEN_DEFINITIONS})
 # OpenCV ####################
 #############################
 find_package(OpenCV 2.4.10 EXACT REQUIRED 
-  PATHS "/home/davidz/work/3rdlibs/OpenCV-2.4.10/install/share/OpenCV"
+  PATHS "/home/davidz/work/3rdlib/3rdParty_OpenCV_2.4.10/install/share/OpenCV"
   NO_DEFAULT_PATH)
 include_directories(${OpenCV_INCLUDE_DIRS})
 link_directories(${OpenCV_LIBRARY_DIRS} "/usr/lib")

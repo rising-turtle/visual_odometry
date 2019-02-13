@@ -42,25 +42,49 @@ void testTwoFrameMatch()
 {
   init_parameters(); 
   string file_dir = "/home/david/work/data/up/320_60";
-  string match_from = "1506980525.731679244.png"; 
-  string match_to = "1506980571.752547004.png"; 
-  
+  string match_from_rgb = "1506980525.731679244.png"; 
+  string match_to_rgb = "1506980571.752547004.png";
+  string match_from_dpt = match_from_rgb; 
+  string match_to_dpt = match_to_rgb; 
+
   ros::NodeHandle nh("~"); 
   nh.param("rs_file_dir", file_dir, file_dir); 
-  nh.param("match_from", match_from, match_from);
-  nh.param("match_to", match_to, match_to); 
+  nh.param("match_from_rgb", match_from_rgb, match_from_rgb);
+  nh.param("match_from_dpt", match_from_dpt, match_from_dpt);
+  nh.param("match_to_rgb", match_to_rgb, match_to_rgb);
+  nh.param("match_to_dpt", match_to_dpt, match_to_dpt); 
 
+    // camera intrinsic parameters 
+    double FX, FY, CX, CY; 
+    double k1, k2, p1, p2; 
+    double SCALE; 
+    int WIDTH; 
+    int HEIGHT; 
+    nh.param("FX", FX, 313.8326); 
+    nh.param("FY", FY, 316.9582);
+    nh.param("CX", CX, 153.7794); 
+    nh.param("CY", CY, 118.7975); 
+    nh.param("WIDTH", WIDTH, 320); 
+    nh.param("HEIGHT", HEIGHT, 240); 
+    nh.param("k1", k1, 0.); 
+    nh.param("k2", k2, 0.); 
+    nh.param("p1", p1, 0.); 
+    nh.param("p2", p2, 0.); 
+    nh.param("SCALE", SCALE, 0.001); 
+    
   // set camera model 
   float d = 1.; // 2.;
   // CamModel c2h(608.1673/d, 605.7/2,  323.717/d, 228.8423/d, 0.18159, -0.60858); 
 
-  CamModel c2h(313.8326, 316.9582, 153.7794, 118.7975, -0.0845, 0.05186); // this is rgb camera's intrinsic parameters
+   // CamModel c2h(313.8326, 316.9582, 153.7794, 118.7975, -0.0845, 0.05186); // this is rgb camera's intrinsic parameters
+   CamModel c2h(FX, FY, CX, CY, k1, k2); 
+
   // CamModel c2h(309.1375, 309.1375, 156.3687, 119.4300); // this is depth camera's intrinsic parameters  
-  c2h.width = 320; // 640 
-  c2h.height = 240; // 480
+  c2h.width = WIDTH; // 320; // 640 
+  c2h.height = HEIGHT; // 240; // 480
 
   CCameraNode::set_cam_cov(c2h); 
-  float dpt_scale = 0.001; 
+  float dpt_scale = SCALE; // 0.001; 
   c2h.setDepthScale(dpt_scale); 
 
   // CSReader r4k; 
@@ -77,8 +101,8 @@ void testTwoFrameMatch()
   
   string f_from_rgb, f_from_dpt, f_to_rgb, f_to_dpt; 
   
-  f_from_rgb = file_dir + "/color/" + match_from; 
-  f_from_dpt = file_dir + "/depth/" + match_from; 
+  f_from_rgb = file_dir + "/color/" + match_from_rgb; 
+  f_from_dpt = file_dir + "/depth/" + match_from_dpt; 
 
   if(!rs2h.readOneFrameCV(f_from_rgb, f_from_dpt, from_gray, from_dpt))
   {
@@ -90,8 +114,8 @@ void testTwoFrameMatch()
   // cv::imshow("from img", from_grey); 
   // cv::waitKey(10); 
 
-  f_to_rgb = file_dir + "/color/" + match_to;
-  f_to_dpt = file_dir + "/depth/" + match_to; 
+  f_to_rgb = file_dir + "/color/" + match_to_rgb;
+  f_to_dpt = file_dir + "/depth/" + match_to_dpt; 
 
   if(!rs2h.readOneFrameCV(f_to_rgb, f_to_dpt, to_gray, to_dpt )) 
   {
