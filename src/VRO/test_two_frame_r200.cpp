@@ -35,6 +35,7 @@ int main(int argc, char* argv[])
   ros::init(argc, argv, "vro_rs2h_two_frame"); 
   ros::NodeHandle n;
   testTwoFrameMatch(); 
+  ROS_INFO("finished!");
   return 0; 
 }
 
@@ -93,6 +94,8 @@ void testTwoFrameMatch()
   // generate imgs and dpts 
   cv::Mat from_dpt; // (SR_HEIGHT, SR_WIDTH, CV_16UC1); 
   cv::Mat to_dpt;   // (SR_HEIGHT, SR_WIDTH, CV_16UC1); 
+  cv::Mat from_rgb;
+  cv::Mat to_rgb;
   cv::Mat from_gray; 
   cv::Mat to_gray; 
 
@@ -111,7 +114,7 @@ void testTwoFrameMatch()
   }
 
   // display imgs 
-  // cv::imshow("from img", from_grey); 
+  // cv::imshow("from img", from_gray); 
   // cv::waitKey(10); 
 
   f_to_rgb = file_dir + "/color/" + match_to_rgb;
@@ -131,11 +134,16 @@ void testTwoFrameMatch()
   from_heq = histogram_equal(from_gray); 
   to_heq = histogram_equal(to_gray); 
 
-  cv::imshow("to img", to_heq); 
-  cv::waitKey(10); 
+  // cv::imshow("to img", to_heq); 
+  // cv::waitKey(10); 
 
   // tf::Transform tran = spr_vo.VRO(to_gray, to_dpt, from_gray, from_dpt, dpt_scale); 
-  tf::Transform tran = spr_vo.VRO(to_heq, to_dpt, from_heq, from_dpt, dpt_scale); 
+    tf::Transform tran = spr_vo.VRO(to_heq, to_dpt, from_heq, from_dpt, dpt_scale); 
+    
+    // try to use mask 
+    // cv::Mat from_mask = cv::imread("/home/davidz/work/tmp/kinetic/src/visual_odometry/data/c_216_mask.png", -1); 
+    // cv::Mat to_mask = cv::imread("/home/davidz/work/tmp/kinetic/src/visual_odometry/data/c_796_mask.png", -1); 
+    // tf::Transform tran = spr_vo.VRO(to_gray, to_dpt, to_mask, from_gray, from_dpt, from_mask, dpt_scale);
 
   print_tf(std::cout, tran); 
   return ; 

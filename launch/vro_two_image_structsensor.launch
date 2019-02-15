@@ -1,6 +1,6 @@
 <launch>
 
-    <node pkg="visual_odometry" type="testVRORS2h" name="testVRORS2h" output="screen">
+    <node pkg="visual_odometry" type="testVRORS2h_2f" name="testVRORS2h" output="screen">
 	<param name="FX" value="531.78"/>
 	<param name="FY" value="531.78"/>
 	<param name="CX" value="320"/>
@@ -9,11 +9,12 @@
 	<param name="WIDTH" value="640"/>
 	<param name="HEIGHT" value="480"/>
 
-    	<param name="rs_file_dir" value="/home/davidz/work/data/color_StructSensor/stair/1"/>
-	<param name="match_from_color" value="c_203.png"/>
-	<param name="match_from_depth" value=""/>
-	<param name="match_to_color" value="c_275.png"/>
-	<param name="match_to_depth" value=""/>
+    	<param name="rs_file_dir" value="/home/davidz/work/data/color_StructSensor/shoe_model/2"/>
+	<param name="match_from_rgb" value="c_216.png"/>
+	<param name="match_from_dpt" value="d_216.png"/>
+	
+	<param name="match_to_rgb" value="c_784.png"/>
+	<param name="match_to_dpt" value="d_784.png"/>
 
     </node>
 

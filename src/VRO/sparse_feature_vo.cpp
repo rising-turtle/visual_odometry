@@ -35,7 +35,7 @@ CSparseFeatureVO::CSparseFeatureVO(CamModel cm) :
 }
 CSparseFeatureVO::~CSparseFeatureVO(){}
 
-void CSparseFeatureVO::featureExtraction(cv::Mat& visual, cv::Mat& depth, float depth_scale, CCameraNode& cn)
+void CSparseFeatureVO::featureExtraction(cv::Mat& visual, cv::Mat& depth, float depth_scale, CCameraNode& cn, cv::Mat mask)
 {
   // convert visual img into grey img
   cv::Mat grey_img; 
@@ -57,6 +57,7 @@ void CSparseFeatureVO::featureExtraction(cv::Mat& visual, cv::Mat& depth, float 
     // SIFT GPU 
     std::vector<float> descriptors;
     SiftGPUWrapper* siftgpu = SiftGPUWrapper::getInstance();
+    // TODO: add mask for siftgpu->detect()
     siftgpu->detect(grey_img, cn.m_feature_loc_2d, descriptors);
     // ROS_INFO("detect siftgpu 2d features %d ", cn.m_feature_loc_2d.size());
     projectTo3DSiftGPU(depth, depth_scale, descriptors, cn); 
@@ -69,7 +70,7 @@ void CSparseFeatureVO::featureExtraction(cv::Mat& visual, cv::Mat& depth, float 
     // depthToCV8UC1(depth, mono8_img);
 
     // Other features 
-    mp_detector->detect( grey_img, cn.m_feature_loc_2d, cv::Mat());// mono8_img detection_mask //  fill 2d locations
+    mp_detector->detect( grey_img, cn.m_feature_loc_2d, mask);// mono8_img detection_mask //  fill 2d locations
     // ROS_INFO("%s at first detect sift 2d features %d ", __FILE__, cn.m_feature_loc_2d.size());
 
     // 1, removedepthless() 
@@ -120,6 +121,17 @@ tf::Transform CSparseFeatureVO::VRO(cv::Mat& tar_i, cv::Mat& tar_d, cv::Mat& src
   featureExtraction(tar_i, tar_d, depth_scale, tar_n); 
  
   return VRO(tar_n, src_n, F, cov); 
+}
+
+tf::Transform CSparseFeatureVO::VRO(cv::Mat& tar_i, cv::Mat& tar_d, cv::Mat& tar_mask, cv::Mat& src_i, cv::Mat& src_d, cv::Mat& src_mask, float depth_scale)
+{
+  CCameraNode src_n; 
+  featureExtraction(src_i, src_d, depth_scale, src_n, src_mask); 
+  
+  CCameraNode tar_n; 
+  featureExtraction(tar_i, tar_d, depth_scale, tar_n, tar_mask); 
+ 
+  return VRO(tar_n, src_n); 
 }
 
 

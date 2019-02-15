@@ -24,11 +24,12 @@ class CSparseFeatureVO
     CSparseFeatureVO(CamModel cm); 
     virtual ~CSparseFeatureVO(); 
     
-    virtual void featureExtraction(cv::Mat& visual, cv::Mat& depth, float depth_scale, CCameraNode& cn); 
+    virtual void featureExtraction(cv::Mat& visual, cv::Mat& depth, float depth_scale, CCameraNode& cn, cv::Mat mask = cv::Mat()); 
     void projectTo3D( cv::Mat& depth, float depth_scale, CCameraNode& cn);
 
     virtual tf::Transform VRO(CCameraNode& tar, CCameraNode& src, _F = 0,  Eigen::Matrix<double, 6, 6>* cov=0 );
     virtual tf::Transform VRO(cv::Mat& tar_i, cv::Mat& tar_d, cv::Mat& src_i, cv::Mat& src_d, float depth_scale, _F = 0, Eigen::Matrix<double, 6, 6>* cov=0 );
+    virtual tf::Transform VRO(cv::Mat& tar_i, cv::Mat& tar_d, cv::Mat& tar_mask, cv::Mat& src_i, cv::Mat& src_d, cv::Mat& src_mask, float depth_scale);
 
     // std::string m_detector_type;
     // std::string m_extractor_type; 
